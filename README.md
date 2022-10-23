@@ -1,5 +1,7 @@
-Authors:
+# Poker
 
-Adrian Yemin
-Zachary Gordon
-Aditya Weling
+## Authors
+
+- Aditya Weling
+- Adrian Yemin
+- Zachary Gordon
