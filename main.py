@@ -26,8 +26,8 @@ class Card(pygame.sprite.Sprite):
         self.surf.fill((255, 255, 255))
         self.rect = self.surf.get_rect()
 
-
 running = True
+
 while running:
 
     # Did the user click the window close button?
