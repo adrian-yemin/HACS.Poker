@@ -35,7 +35,7 @@ class Player1:
         self.stack = 1000
         self.chipsInPlay = 0
         self.turn = False
-
+        self.a = 1
 
     def turn(self, c1, c2):
         Player1.turn = True
