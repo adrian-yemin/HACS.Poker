@@ -11,6 +11,7 @@ from pygame.locals import (
 )
 import random
 
+
 pygame.mixer.init()
 pygame.init()
 
@@ -18,41 +19,49 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
+suit = ['h', 's', 'c', 'd']
+
 
 class Card(pygame.sprite.Sprite):
-    def __init__(self, value, suit, image):
+    def __init__(self, value, suit):
         super(Card, self).__init__()
         self.value = value
         self.suit = suit
-        self.image = image
-        self.surf = pygame.Surface((75, 25))
-        self.surf.fill((255, 255, 255))
-        self.rect = self.surf.get_rect()
 
-    def printSelf(self):
+    @property
+    def image(self):
+        return pygame.image.load('/Users/adrian_yemin/PycharmProjects/Poker/res/' + str(self.value) + str(self.suit) + '.png')
+
+    def print_self(self):
         print(self.value, self.suit, self.image)
 
 
-suit = ['h', 's', 'c', 'd']
+class Deck:
+    def __init__(self):
+        self.cards = []
+        for c in range(len(suit)):
+            color = suit[c]
+            for value in range(1, 14):
+                self.cards.append(Card(value, color))
+        random.shuffle(self.cards)
 
-deck = []
-for c in range(len(suit)):
-    color = suit[c]
-    for value in range(1, 14):
-        deck.append(Card(value, color, str(value) + str(color) + '.png'))
+    def print_deck(self):
+        for x in range(len(self.cards)):
+            print(self.cards[x].print_self())
 
-for x in range(len(deck)):
-    print(deck[x].printSelf())
+
+card1 = Card(5, suit[0])
 
 running = True
 while running:
 
-    # Did the user click the window close button?
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
     screen.fill((34, 139, 34))
+
+    screen.blit(card1.image, (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
 
     pygame.display.flip()
 
