@@ -76,8 +76,8 @@ class Player:
     def turn(self, number, hands):
         player1, player2, player3, player4, player4, player5, player6 = Player
         player1.turn = True
-        for i in range(0, ncards):
-            if (ncards[0].suit == ncards[1].suit)
+        # for i in range(0, ncards):
+        #     if (ncards[0].suit == ncards[1].suit)
 
 
 class Button:
@@ -93,20 +93,16 @@ class GameStateManager:
         self.playerList = []
 
 
-for i in range(0, 6)
-    playerList.append
-
-
     def check(self, Player):
 
 
-    def fold(self, Player):
+        def fold(self, Player):
 
 
-    def bet(self, Player):
+            def bet(self, Player):
 
 
-    print(deal(6))
+                print(deal(6))
 
 running = True
 while running:
