@@ -11,16 +11,12 @@ from pygame.locals import (
 )
 import random
 
-
 pygame.mixer.init()
 pygame.init()
 
-SCREEN_WIDTH = 800
+SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
-
-suit = ['h', 's', 'c', 'd']
-
 
 class Card(pygame.sprite.Sprite):
     def __init__(self, value, suit):
@@ -30,11 +26,13 @@ class Card(pygame.sprite.Sprite):
 
     @property
     def image(self):
-        return pygame.image.load('/Users/adrian_yemin/PycharmProjects/Poker/res/' + str(self.value) + str(self.suit) + '.png')
+        return pygame.image.load('/Users/aditya_weling/PycharmProjects/HACS.Poker/res' + str(self.value) + str(self.suit) + '.png')
 
     def print_self(self):
         print(self.value, self.suit, self.image)
 
+
+suit = ['h', 's', 'c', 'd']
 
 class Deck:
     def __init__(self):
@@ -61,7 +59,7 @@ while running:
 
     screen.fill((34, 139, 34))
 
-    screen.blit(card1.image, (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+    screen.blit(card1.image, (SCREEN_HEIGHT / 2, SCREEN_WIDTH / 2))
 
     pygame.display.flip()
 
