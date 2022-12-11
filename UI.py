@@ -1,3 +1,5 @@
+import os.path
+
 import pygame
 from pygame.locals import (
     RLEACCEL,
@@ -13,8 +15,8 @@ from pygame.locals import (
 pygame.mixer.init()
 pygame.init()
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1200
+SCREEN_HEIGHT = 750
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
 running = True
@@ -25,6 +27,10 @@ while running:
             running = False
 
     screen.fill((34, 139, 34))
+
+    card = pygame.image.load(os.path.join('res', '10h.png'))
+
+    screen.blit(card, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
 
     pygame.display.flip()
 

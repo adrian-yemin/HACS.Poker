@@ -16,7 +16,7 @@ class Deck(object):
     def __init__(self):
         super().__init__()
         self.cards = []
-        suits = ['Diamonds', 'Hearts', 'Spades', 'Clubs']
+        suits = ['d', 'h', 's', 'c']
         values = {'Two': 2,
                   'Three': 3,
                   'Four': 4,
@@ -121,6 +121,8 @@ class Deal:
             self.play_post_flop(bet_round)
             bet_round.play_table()
         bet_round.execute_bet()
+        for player in range(len(self.player_deal_states)):
+            self.player_deal_states[player].folded = False
 
 
 class BettingRound:
@@ -176,8 +178,9 @@ class BettingRound:
                 return False
         if self.highest_bet != 0:
             return True
-        if self.player_round_states[length - 1].get_last_action() is None:
-            return False
+        for player in range(len(self.player_round_states)):
+            if self.player_round_states[player].get_last_action() is None:
+                return False
         return True
 
     def get_input(self):
@@ -194,6 +197,7 @@ class BettingRound:
             cur_player_round_state = self.player_round_states[self.current_better_index]
             if cur_player_round_state.player_deal_state.folded is True:
                 self.current_better_index = (self.current_better_index + 1) % len(self.player_round_states)
+                print('SKIPPED FOLDED PLAYER')
                 continue
             action, amount = self.get_input()
             if action == Action.Raise:
@@ -208,6 +212,14 @@ class BettingRound:
             player.total_bet = 0
             player.last_action = None
 
+    def create_player_hand(self, player):
+        complete_player_hand = []
+        for card in range(2):
+            complete_player_hand.append(player.player_deal_state.get_hand[card])
+        for card in range(len(self.community_cards)):
+            complete_player_hand.append(self.community_cards[card])
+        return complete_player_hand
+
 
 class Player:
     def __init__(self, name):
@@ -219,12 +231,16 @@ class PlayerDealState:
     def __init__(self, player, hand):
         self.folded = False
         self.player = player
+        self.hand = hand
 
     def fold(self):
         self.folded = True
 
     def get_fold_state(self):
         return self.folded
+
+    def get_hand(self):
+        return self.hand
 
 
 class PlayerRoundState:
