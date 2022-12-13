@@ -19,6 +19,7 @@ SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 750
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
+
 running = True
 while running:
 
@@ -27,6 +28,8 @@ while running:
             running = False
 
     screen.fill((34, 139, 34))
+
+    x, y = pygame.mouse.get_pos()
 
     card = pygame.image.load(os.path.join('res', '10h.png'))
 
