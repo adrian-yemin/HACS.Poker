@@ -1,5 +1,5 @@
 import os.path
-
+import model
 import pygame
 from pygame.locals import (
     RLEACCEL,
@@ -19,6 +19,8 @@ SCREEN_WIDTH = 1200
 SCREEN_HEIGHT = 750
 screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
 
+hand_positions = [(560, 625), (640, 625), (0, 335), (80, 335), (540, 0), (640, 0), (1040, 335), (1120, 335)]
+community_card_positions = [(400, 335), (480, 335), (560, 335), (640, 335), (720, 335)]
 
 running = True
 while running:
@@ -38,3 +40,4 @@ while running:
     pygame.display.flip()
 
 pygame.quit()
+
