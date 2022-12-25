@@ -1,5 +1,4 @@
 import os.path
-import model
 import pygame
 from pygame.locals import (
     RLEACCEL,
@@ -12,32 +11,59 @@ from pygame.locals import (
     QUIT,
 )
 
-pygame.mixer.init()
-pygame.init()
 
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 750
-screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+class UI:
+    def __init__(self):
+        pygame.mixer.init()
+        pygame.init()
+        SCREEN_WIDTH = 1200
+        SCREEN_HEIGHT = 750
+        self.screen = pygame.display.set_mode([SCREEN_WIDTH, SCREEN_HEIGHT])
+        self.screen.fill((34, 139, 34))
+        print(pygame.font.get_fonts())
+        self.font = pygame.font.Font(pygame.font.get_default_font(), 24)
+        self.card_images = {}
+        for suit in ['c', 'd', 'h', 's']:
+            for value in range(1, 14):
+                key_card = str(value) + suit
+                self.card_images[key_card] = pygame.image.load(os.path.join('res', key_card + '.png'))
 
-hand_positions = [(560, 625), (640, 625), (0, 335), (80, 335), (540, 0), (640, 0), (1040, 335), (1120, 335)]
-community_card_positions = [(400, 335), (480, 335), (560, 335), (640, 335), (720, 335)]
+    def render(self, betting_round):
+        y = 50
+        x = 150
+        for i in range(len(betting_round.deal.game.players)):
+            player = betting_round.deal.game.players[i]
+            player_name_surface = self.font.render(player.name, True, (0, 0, 0))
+            self.screen.blit(player_name_surface, (0, y))
+            self.screen.blit(self.card_images[
+                                 self.card_to_dictionary_key(betting_round.deal.player_deal_states[i].hand[0])], (x, y))
+            self.screen.blit(self.card_images[
+                                 self.card_to_dictionary_key(betting_round.deal.player_deal_states[i].hand[1])],
+                             (x + 100, y))
+            y += 100
+        pygame.display.update()
+        pygame.event.get()
 
-running = True
-while running:
+    @staticmethod
+    def card_to_dictionary_key(card):
+        return str(card.value) + card.suit
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-    screen.fill((34, 139, 34))
-
-    x, y = pygame.mouse.get_pos()
-
-    card = pygame.image.load(os.path.join('res', '10h.png'))
-
-    screen.blit(card, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
-
-    pygame.display.flip()
-
-pygame.quit()
-
+# hand_positions = [(560, 625), (640, 625), (0, 335), (80, 335), (540, 0), (640, 0), (1040, 335), (1120, 335)]
+# community_card_positions = [(400, 335), (480, 335), (560, 335), (640, 335), (720, 335)]
+#
+# running = True
+# while running:
+#
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             running = False
+#
+#     screen.fill((34, 139, 34))
+#
+#     card = pygame.image.load(os.path.join('res', '10h.png'))
+#
+#     screen.blit(card, (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
+#
+#     pygame.display.flip()
+#
+# pygame.quit()
