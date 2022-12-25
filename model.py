@@ -273,3 +273,50 @@ class PlayerRoundState:
         self.player_deal_state.player.stack -= amount
         self.betting_round.highest_bet += amount
         self.betting_round.deal.pot += ((self.betting_round.get_highest_bet() + amount) - self.total_bet)
+
+    def evaluate_hand(complete_player_hand):
+
+        high_card = 1
+        pair = 2
+        two_pair = 3
+        three_of_a_kind = 4
+        straight = 5
+        flush = 6
+        full_house = 7
+        four_of_a_kind = 8
+        straight_flush = 9
+        royal_flush = 10
+
+        complete_player_hand.sort(key=lambda x: x[0], reverse=True)
+
+        counts = [complete_player_hand.count(card) for card in complete_player_hand]
+
+        flush = all(card[1] == complete_player_hand[0][1] for card in complete_player_hand)
+
+        straight = all(complete_player_hand[i][0] == complete_player_hand[i + 1][0] - 1 for i in range(len(complete_player_hand) - 1))
+
+        four_of_a_kind = 4 in counts
+
+        three_of_a_kind = 3 in counts
+
+
+        pairs = [i for i in counts if i == 2]
+
+        if straight and flush:
+            return straight_flush
+        elif four_of_a_kind:
+            return four_of_a_kind
+        elif three_of_a_kind and len(pairs) == 1:
+            return full_house
+        elif flush:
+            return flush
+        elif straight:
+            return straight
+        elif three_of_a_kind:
+            return three_of_a_kind
+        elif len(pairs) == 2:
+            return two_pair
+        elif len(pairs) == 1:
+            return pair
+        else:
+            return high_card
