@@ -33,14 +33,23 @@ class UI:
         x = 150
         for i in range(len(betting_round.deal.game.players)):
             player = betting_round.deal.game.players[i]
+            player_deal = betting_round.deal.player_deal_states[i]
+            player_round = betting_round.player_round_states[i]
             player_name_surface = self.font.render(player.name, True, (0, 0, 0))
+            self.screen.fill((34, 139, 34))
             self.screen.blit(player_name_surface, (0, y))
             self.screen.blit(self.card_images[
                                  self.card_to_dictionary_key(betting_round.deal.player_deal_states[i].hand[0])], (x, y))
             self.screen.blit(self.card_images[
                                  self.card_to_dictionary_key(betting_round.deal.player_deal_states[i].hand[1])],
                              (x + 100, y))
-            y += 100
+            player_stack_surface = self.font.render(str(player.stack), True, (0, 0, 0))
+            player_folded_surface = self.font.render(str(player_deal.folded), True, (0, 0, 0))
+            player_current_bet_surface = self.font.render(str(player_round.total_bet), True, (0, 0, 0))
+            self.screen.blit(player_stack_surface, (350, y))
+            self.screen.blit(player_folded_surface, (450, y))
+            self.screen.blit(player_current_bet_surface, (550, y))
+            y += 125
         pygame.display.update()
         pygame.event.get()
 
