@@ -57,8 +57,9 @@ class Action:
 
 
 class Game:
-    def __init__(self, players):
+    def __init__(self, players, ui):
         self.players = players
+        self.ui = ui
 
     def is_over(self):
         length = len(self.players)
@@ -138,6 +139,7 @@ class BettingRound:
         self.highest_bet = 0
 
     def print_current_state(self):
+        self.deal.game.ui.render(self)
         for player in self.player_round_states:
             print('Name: ' + player.player_deal_state.player.name)
             print('   Stack: ' + str(player.player_deal_state.player.stack))
