@@ -289,7 +289,7 @@ class PlayerRoundState:
 
         complete_player_hand.sort(key=lambda x: x[0], reverse=True)
 
-        counts = [complete_player_hand.count(card) for card in complete_player_hand]
+        counts = [complete_player_hand.value(card) for card in complete_player_hand]
 
         flush = all(card[1] == complete_player_hand[0][1] for card in complete_player_hand)
 
@@ -320,3 +320,5 @@ class PlayerRoundState:
             return pair
         else:
             return high_card
+
+        
