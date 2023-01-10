@@ -31,6 +31,9 @@ class UI:
     def render(self, betting_round):
         y = 50
         x = 150
+        self.screen.fill((34, 139, 34))
+        hand_positions = [(560, 625), (640, 625), (0, 335), (80, 335), (540, 0), (640, 0)]
+        community_card_positions = [(400, 335), (480, 335), (560, 335), (640, 335), (720, 335)]
         for i in range(len(betting_round.deal.game.players)):
             player = betting_round.deal.game.players[i]
             player_deal = betting_round.deal.player_deal_states[i]
@@ -50,6 +53,10 @@ class UI:
             self.screen.blit(player_folded_surface, (450, y))
             self.screen.blit(player_current_bet_surface, (550, y))
             y += 125
+        for i in range(len(betting_round.community_cards)):
+            community_card = betting_round.community_cards[i]
+            self.screen.blit(self.card_images[
+                                 self.card_to_dictionary_key(community_card)], community_card_positions[i])
         pygame.display.update()
         pygame.event.get()
 
@@ -72,3 +79,14 @@ class UI:
 
 
 
+
+# running = True
+# while running:
+#
+#     for event in pygame.event.get():
+#         if event.type == pygame.QUIT:
+#             running = False
+#
+#     pygame.display.flip()
+#
+# pygame.quit()
