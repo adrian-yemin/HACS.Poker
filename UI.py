@@ -31,12 +31,14 @@ class UI:
     def render(self, betting_round):
         y = 50
         x = 150
+        self.screen.fill((34, 139, 34))
+        hand_positions = [(560, 625), (640, 625), (0, 335), (80, 335), (540, 0), (640, 0)]
+        community_card_positions = [(400, 335), (480, 335), (560, 335), (640, 335), (720, 335)]
         for i in range(len(betting_round.deal.game.players)):
             player = betting_round.deal.game.players[i]
             player_deal = betting_round.deal.player_deal_states[i]
             player_round = betting_round.player_round_states[i]
             player_name_surface = self.font.render(player.name, True, (0, 0, 0))
-            self.screen.fill((34, 139, 34))
             self.screen.blit(player_name_surface, (0, y))
             self.screen.blit(self.card_images[
                                  self.card_to_dictionary_key(betting_round.deal.player_deal_states[i].hand[0])], (x, y))
@@ -50,6 +52,10 @@ class UI:
             self.screen.blit(player_folded_surface, (450, y))
             self.screen.blit(player_current_bet_surface, (550, y))
             y += 125
+        for i in range(len(betting_round.community_cards)):
+            community_card = betting_round.community_cards[i]
+            self.screen.blit(self.card_images[
+                                 self.card_to_dictionary_key(community_card)], community_card_positions[i])
         pygame.display.update()
         pygame.event.get()
 
@@ -57,21 +63,13 @@ class UI:
     def card_to_dictionary_key(card):
         return str(card.value) + card.suit
 
-# hand_positions = [(560, 625), (640, 625), (0, 335), (80, 335), (540, 0), (640, 0), (1040, 335), (1120, 335)]
-# community_card_positions = [(400, 335), (480, 335), (560, 335), (640, 335), (720, 335)]
-#
+
 # running = True
 # while running:
 #
 #     for event in pygame.event.get():
 #         if event.type == pygame.QUIT:
 #             running = False
-#
-#     screen.fill((34, 139, 34))
-#
-#     card = pygame.image.load(os.path.join('res', '10h.png'))
-#
-#     screen.blit(card, (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2))
 #
 #     pygame.display.flip()
 #
