@@ -65,9 +65,9 @@ class UI:
             self.surf.fill((255, 255, 255))
             self.rect = self.surf.get_rect()
 
-            # def on_button_click():
-            #     event.type
-            #     user_event == 'f'
+            def on_button_click():
+                event.type
+                user_event == 'f'
 
 
 
