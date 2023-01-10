@@ -299,7 +299,6 @@ class PlayerRoundState:
 
         three_of_a_kind = 3 in counts
 
-
         pairs = [i for i in counts if i == 2]
 
         if straight and flush:
