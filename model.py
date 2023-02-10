@@ -293,7 +293,8 @@ class PlayerRoundState:
 
         flush = all(card[1] == complete_player_hand[0][1] for card in complete_player_hand)
 
-        straight = all(complete_player_hand[i][0] == complete_player_hand[i + 1][0] - 1 for i in range(len(complete_player_hand) - 1))
+
+        straight = all(complete_player_hand. == complete_player_hand[i + 1][0] - 1 for i in range(len(complete_player_hand) - 1))
 
         four_of_a_kind = 4 in counts
 
@@ -303,6 +304,8 @@ class PlayerRoundState:
 
         if straight and flush:
             return straight_flush
+        elif flush and straight[i]
+            return royal_flush
         elif four_of_a_kind:
             return four_of_a_kind
         elif three_of_a_kind and len(pairs) == 1:
