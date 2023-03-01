@@ -124,6 +124,118 @@ class Deal:
         for player in range(len(self.player_deal_states)):
             self.player_deal_states[player].folded = False
 
+        def create_player_hand(player):
+            complete_player_hand = []
+            for card in range(2):
+                complete_player_hand.append(player.get_hand[card])
+            for card in range(len(bet_round.community_cards)):
+                complete_player_hand.append(bet_round.community_cards[card])
+            return complete_player_hand
+
+        def evaluate_hand(complete_player_hand):
+            complete_player_hand = sorted(complete_player_hand, key=lambda x: x.value, reverse=False)
+            counts = {}
+            values = []
+            suits = []
+            for card in complete_player_hand:
+                values.append(card.value)
+                suits.append(card.suit)
+            for c in range(len(complete_player_hand)):
+                counts[values[c]] = values.count(values[c])
+
+            def straight_flush():
+                for a in range(3):
+                    order_count = 0
+                    suit_count = 0
+                    for c in range(a, a + 4):
+                        if values[c] == values[c + 1] - 1:
+                            order_count += 1
+                        if suits[c] == suits[c + 1]:
+                            suit_count += 1
+                    if order_count == 4 and suit_count == 4:
+                        return True
+                return False
+
+            def four_kind():
+                quads = 0
+                for c in counts:
+                    if counts[c] == 4:
+                        quads += 1
+                if quads == 1:
+                    return True
+                return False
+
+            def full_house():
+                triples = 0
+                for c in counts:
+                    if counts[c] == 3:
+                        triples += 1
+                    if triples == 1:
+                        for x in range(len(counts)):
+                            if counts[c] == 2:
+                                return True
+
+            def flush():
+                for suit in set(suits):
+                    if suits.count(suit) >= 5:
+                        return True
+
+            def straight():
+                for card in range(3):
+                    order_count = 0
+                    for c in range(card + 4):
+                        if order_count == 4:
+                            return True
+                        if values[c] == values[c + 1] - 1:
+                            order_count += 1
+
+            def three_kind():
+                triples = 0
+                for c in counts:
+                    if counts[c] == 3:
+                        triples += 1
+                if triples == 1:
+                    return True
+
+            def two_pair():
+                pairs = 0
+                for c in counts:
+                    if counts[c] == 2:
+                        pairs += 1
+                if pairs >= 2:
+                    return True
+
+            def pair():
+                pairs = 0
+                for c in counts:
+                    if counts[c] == 2:
+                        pairs += 1
+                if pairs == 1:
+                    return True
+
+            if straight_flush():
+                return 8
+            if four_kind():
+                return 7
+            if full_house():
+                return 6
+            if flush():
+                return 5
+            if straight():
+                return 4
+            if three_kind():
+                return 3
+            if two_pair():
+                return 2
+            if pair():
+                return 1
+            else:
+                return 0
+
+        for player in range(len(self.game.player_deal_states)):
+            evaluate_hand(create_player_hand(player))
+
+
 
 class BettingRound:
     def __init__(self, player_deal_states, dealer_index, deal):
@@ -212,14 +324,6 @@ class BettingRound:
         for player in self.player_round_states:
             player.total_bet = 0
             player.last_action = None
-
-    def create_player_hand(self, player):
-        complete_player_hand = []
-        for card in range(2):
-            complete_player_hand.append(player.player_deal_state.get_hand[card])
-        for card in range(len(self.community_cards)):
-            complete_player_hand.append(self.community_cards[card])
-        return complete_player_hand
 
 
 class Player:
