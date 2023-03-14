@@ -11,6 +11,7 @@ from pygame.locals import (
     QUIT,
 )
 
+
 class UI:
     def __init__(self):
         self.clicked = None
@@ -57,20 +58,8 @@ class UI:
             community_card = betting_round.community_cards[i]
             self.screen.blit(self.card_images[
                                  self.card_to_dictionary_key(community_card)], community_card_positions[i])
-        color_citrine = (228, 208, 10)
-        pygame.draw.rect(self.screen, color_citrine, [590, 315, 80, 30])
-        smallfont = pygame.font.SysFont('Corbel', 35)
-        text = smallfont.render('Check', True, (255, 255, 255))
-        self.screen.blit(text, (590, 315))
-
         pygame.display.update()
         pygame.event.get()
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if self.rect.collidepoint(event.pos):
-                    self.clicked = True
-                if self.clicked:
-                    user_event = "f"
 
     @staticmethod
     def card_to_dictionary_key(card):

@@ -147,50 +147,61 @@ class Deal:
                 for a in range(3):
                     order_count = 0
                     suit_count = 0
+                    high_card = values[0]
                     for c in range(a, a + 4):
                         if values[c] == values[c + 1] - 1:
                             order_count += 1
+                            high_card = values[c + 1]
                         if suits[c] == suits[c + 1]:
                             suit_count += 1
                     if order_count == 4 and suit_count == 4:
-                        return True
+                        return True, high_card
                 return False
 
             def four_kind():
                 quads = 0
+                high_card = 0
                 for c in counts:
                     if counts[c] == 4:
                         quads += 1
+                        high_card = values[c]
                 if quads == 1:
-                    return True
+                    return True, high_card
                 return False
 
             def full_house():
                 triples = 0
+                high_card = 0
                 for c in counts:
                     if counts[c] == 3:
                         triples += 1
+                        high_card = values[c]
                     if triples == 1:
                         for x in range(len(counts)):
                             if counts[c] == 2:
-                                return True
+                                return True, high_card
+                return False
 
             def flush():
+                high_card = 0
                 for suit in set(suits):
                     if suits.count(suit) >= 5:
                         return True
 
             def straight():
+                high_card = 0
                 for card in range(3):
                     order_count = 0
                     for c in range(card + 4):
                         if order_count == 4:
-                            return True
+                            return True, high_card
                         if values[c] == values[c + 1] - 1:
                             order_count += 1
+                            high_card = values[c + 1]
 
             def three_kind():
                 triples = 0
+                high_card = 0
                 for c in counts:
                     if counts[c] == 3:
                         triples += 1
@@ -199,6 +210,7 @@ class Deal:
 
             def two_pair():
                 pairs = 0
+                high_card = 0
                 for c in counts:
                     if counts[c] == 2:
                         pairs += 1
@@ -207,6 +219,7 @@ class Deal:
 
             def pair():
                 pairs = 0
+                high_card = 0
                 for c in counts:
                     if counts[c] == 2:
                         pairs += 1
@@ -230,11 +243,16 @@ class Deal:
             if pair():
                 return 1
             else:
-                return 0
+                return 0, max(complete_player_hand)
 
-        for player in range(len(self.game.player_deal_states)):
-            evaluate_hand(create_player_hand(player))
-
+        winner_index = 0
+        second_winner_index = None
+        for player in range(len(self.game.player_deal_states - 1)):
+            x = self.player_deal_states[player]
+            y = self.player_deal_states[player + 1]
+            if evaluate_hand(create_player_hand(y)) > evaluate_hand(create_player_hand(x)):
+                winner_index = player + 1
+            # elif evaluate_hand(create_player_hand(y)) == evaluate_hand(create_player_hand(x):
 
 
 class BettingRound:
@@ -377,54 +395,3 @@ class PlayerRoundState:
         self.player_deal_state.player.stack -= amount
         self.betting_round.highest_bet += amount
         self.betting_round.deal.pot += ((self.betting_round.get_highest_bet() + amount) - self.total_bet)
-
-    def evaluate_hand(complete_player_hand):
-
-        high_card = 1
-        pair = 2
-        two_pair = 3
-        three_of_a_kind = 4
-        straight = 5
-        flush = 6
-        full_house = 7
-        four_of_a_kind = 8
-        straight_flush = 9
-        royal_flush = 10
-
-        complete_player_hand.sort(key=lambda x: x[0], reverse=True)
-
-        counts = [complete_player_hand.value(card) for card in complete_player_hand]
-
-        flush = all(card[1] == complete_player_hand[0][1] for card in complete_player_hand)
-
-
-        straight = all(complete_player_hand. == complete_player_hand[i + 1][0] - 1 for i in range(len(complete_player_hand) - 1))
-
-        four_of_a_kind = 4 in counts
-
-        three_of_a_kind = 3 in counts
-
-        pairs = [i for i in counts if i == 2]
-
-        if straight and flush:
-            return straight_flush
-        elif flush and straight[i]
-            return royal_flush
-        elif four_of_a_kind:
-            return four_of_a_kind
-        elif three_of_a_kind and len(pairs) == 1:
-            return full_house
-        elif flush:
-            return flush
-        elif straight:
-            return straight
-        elif three_of_a_kind:
-            return three_of_a_kind
-        elif len(pairs) == 2:
-            return two_pair
-        elif len(pairs) == 1:
-            return pair
-        else:
-            return high_card
-
-        
