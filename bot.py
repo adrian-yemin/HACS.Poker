@@ -1,3 +1,2 @@
-dictionary = {6: 4, 9: 1, 10: 1, 13: 1}
-if dictionary[6] == 4:
-    print(4)
+mydict = {1: 6, 2: 8, 3: 9, 6: 8}
+print(mydict[4])
