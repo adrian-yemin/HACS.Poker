@@ -5,8 +5,8 @@ players = [Player('Adrian'), Player('Zach'), Player('Aditya')]
 ui = UI()
 game = Game(players, ui)
 
+game.play_game()
 
-# game.play_game()
 
 def evaluate_hand(complete_player_hand):
     complete_player_hand = sorted(complete_player_hand, key=lambda x: x.value, reverse=False)
@@ -18,9 +18,11 @@ def evaluate_hand(complete_player_hand):
         suits.append(card.suit)
     for c in range(len(complete_player_hand)):
         counts[values[c]] = values.count(values[c])
+    single_values = list(counts.keys())
     print(counts)
     print(values)
     print(suits)
+    print(single_values)
 
     def straight_flush():
         for a in range(3):
@@ -47,7 +49,11 @@ def evaluate_hand(complete_player_hand):
                 high_card = list(counts.keys())[x]
             x += 1
         if quads == 1:
-            return 7, high_card
+            if max(single_values) == high_card:
+                kicker = single_values[len(single_values) - 2]
+            else:
+                kicker = max(single_values)
+            return 7, high_card, kicker
         return False
 
     def full_house():
@@ -92,19 +98,24 @@ def evaluate_hand(complete_player_hand):
         triples = 0
         high_card = 0
         x = 0
+        kicker = [-1, 0]
         for c in counts:
             if counts[c] == 3:
                 triples += 1
                 high_card = values[x]
             x += 1
         if triples == 1:
-            return 3, high_card
+            for c in range(len(single_values)):
+                if single_values[c] != high_card and single_values[c] > min(kicker):
+                    kicker[kicker.index(min(kicker))] = single_values[c]
+            return 3, high_card, kicker
         return False
 
     def two_pair():
         pairs = 0
         high_card = 0
         x = 0
+        kicker = 0
         for c in counts:
             if counts[c] == 2:
                 pairs += 1
@@ -118,13 +129,17 @@ def evaluate_hand(complete_player_hand):
         pairs = 0
         high_card = 0
         x = 0
+        kicker = [-2, -1, 0]
         for c in counts:
             if counts[c] == 2:
                 pairs += 1
                 high_card = list(counts.keys())[x]
             x += 1
         if pairs == 1:
-            return 1, high_card
+            for c in range(len(single_values)):
+                if single_values[c] != high_card and single_values[c] > min(kicker):
+                    kicker[kicker.index(min(kicker))] = single_values[c]
+            return 1, high_card, kicker
         return False
 
     if straight_flush():
@@ -164,10 +179,10 @@ def evaluate_hand(complete_player_hand):
 
 card1 = Card(5, 's', 'Five')
 card2 = Card(11, 's', 'Jack')
-card3 = Card(2, 'c', 'Two')
-card4 = Card(7, 's', 'Seven')
-card5 = Card(9, 'h', 'Nine')
-card6 = Card(9, 'c', 'Nine')
-card7 = Card(4, 'h', 'Four')
+card3 = Card(9, 'd', 'Nine')
+card4 = Card(9, 's', 'Nine')
+card5 = Card(10, 'h', 'Ten')
+card6 = Card(4, 'c', 'Four')
+card7 = Card(6, 'h', 'Six')
 complete_hand = [card1, card2, card3, card4, card5, card6, card7]
-evaluate_hand(complete_hand)
+# evaluate_hand(complete_hand)

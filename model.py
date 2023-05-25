@@ -8,7 +8,7 @@ class Card(object):
         self.name = name
 
     def __repr__(self):
-        return str(self.name) + ' of ' + self.suit
+        return self.name + ' of ' + str(self.suit)
 
 
 class Deck(object):
@@ -142,9 +142,11 @@ class Deal:
                 suits.append(card.suit)
             for c in range(len(complete_player_hand)):
                 counts[values[c]] = values.count(values[c])
+            single_values = list(counts.keys())
             print(counts)
             print(values)
             print(suits)
+            print(single_values)
 
             def straight_flush():
                 for a in range(3):
@@ -171,7 +173,11 @@ class Deal:
                         high_card = list(counts.keys())[x]
                     x += 1
                 if quads == 1:
-                    return 7, high_card
+                    if max(single_values) == high_card:
+                        kicker = single_values[len(single_values) - 2]
+                    else:
+                        kicker = max(single_values)
+                    return 7, high_card, kicker
                 return False
 
             def full_house():
@@ -216,19 +222,24 @@ class Deal:
                 triples = 0
                 high_card = 0
                 x = 0
+                kicker = [-1, 0]
                 for c in counts:
                     if counts[c] == 3:
                         triples += 1
                         high_card = values[x]
                     x += 1
                 if triples == 1:
-                    return 3, high_card
+                    for c in range(len(single_values)):
+                        if single_values[c] != high_card and single_values[c] > min(kicker):
+                            kicker[kicker.index(min(kicker))] = single_values[c]
+                    return 3, high_card, kicker
                 return False
 
             def two_pair():
                 pairs = 0
                 high_card = 0
                 x = 0
+                kicker = 0
                 for c in counts:
                     if counts[c] == 2:
                         pairs += 1
@@ -242,13 +253,17 @@ class Deal:
                 pairs = 0
                 high_card = 0
                 x = 0
+                kicker = [-2, -1, 0]
                 for c in counts:
                     if counts[c] == 2:
                         pairs += 1
                         high_card = list(counts.keys())[x]
                     x += 1
                 if pairs == 1:
-                    return 1, high_card
+                    for c in range(len(single_values)):
+                        if single_values[c] != high_card and single_values[c] > min(kicker):
+                            kicker[kicker.index(min(kicker))] = single_values[c]
+                    return 1, high_card, kicker
                 return False
 
             if straight_flush():
@@ -315,7 +330,7 @@ class BettingRound:
         self.highest_bet = 0
 
     def print_current_state(self):
-        self.deal.game.ui.render(self)
+        # self.deal.game.ui.render(self)
         for player in self.player_round_states:
             print('Name: ' + player.player_deal_state.player.name)
             print('   Stack: ' + str(player.player_deal_state.player.stack))
